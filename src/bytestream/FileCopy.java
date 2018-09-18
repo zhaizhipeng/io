@@ -21,7 +21,7 @@ public class FileCopy {
 
         FileInputStream fileInputStream = new FileInputStream(orginFile);
         FileOutputStream fileOutputStream = new FileOutputStream(destFile);
-        byte[] bytes = new byte[52];
+        byte[] bytes = new byte[1024];
         while (fileInputStream.read(bytes) != -1){
             System.out.println(bytes.length);
             fileOutputStream.write(bytes);
