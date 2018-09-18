@@ -12,10 +12,10 @@ public class FileInputStreamDemo{
 
     public static void main(String args[]){
         try {
-            //showContent();
-            //showContent2();
-            //showContent3();
-            //showContent4();
+            showContent();
+            showContent2();
+            showContent3();
+            showContent4();
             showContent5();
         } catch (IOException e) {
             e.printStackTrace();
