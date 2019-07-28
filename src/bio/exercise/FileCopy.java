@@ -1,15 +1,14 @@
-package bio.bytestream;
+package bio.exercise;
 
 import org.junit.Test;
 
 import java.io.*;
 
+/**
+ * 文件拷贝
+ */
 public class FileCopy {
 
-    /**
-     * 文件复制
-     * @throws IOException
-     */
     @Test
     public void testCopyFile() throws IOException {
 

@@ -1,4 +1,4 @@
-package util;
+package bio.util;
 
 import java.io.File;
 import java.io.FilenameFilter;

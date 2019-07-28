@@ -1,4 +1,4 @@
-package bio.bytestream;
+package bio.exercise;
 
 import org.junit.Test;
 
