@@ -1,6 +1,8 @@
 package bio.bytestream;
 
 import org.junit.Test;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -15,7 +17,7 @@ public class TestFileOutputStream {
      */
     @Test
     public void testWrite() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream("Test.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("Test.txt"));
         fileOutputStream.write('j');
         fileOutputStream.write('a');
         fileOutputStream.write('v');
@@ -29,7 +31,7 @@ public class TestFileOutputStream {
      */
     @Test
     public void testWrite2() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream("Test.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("Test.txt"));
         byte[] bytes = "hello java".getBytes();
         fileOutputStream.write(bytes);
         fileOutputStream.close();
@@ -41,20 +43,20 @@ public class TestFileOutputStream {
      */
     @Test
     public void testWrite3() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream("Test.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("Test.txt"));
         byte[] bytes = "hello java".getBytes();
         fileOutputStream.write(bytes,0,3);
         fileOutputStream.close();
     }
 
     /**
-     * FileOutputStream(String path, boolean append) ：append 为 true 表示追加写，默认为 false
+     * FileOutputStream(File file, boolean append) ：append 为 true 表示追加写，默认为 false
      * 防止文件被重写
      * @throws IOException
      */
     @Test
     public void testWrite4() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream("Test.txt",true);
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("Test.txt"),true);
         byte[] bytes = "hello java".getBytes();
         fileOutputStream.write(bytes);
         fileOutputStream.close();
