@@ -11,12 +11,10 @@ import java.util.HashMap;
  */
 public class TestObjectOutputStream {
 
-    private static final String TMP_FILE = "student.tmp";
-
     @Test
     public void testWrite() throws IOException {
 
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(TMP_FILE));
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("test.txt"));
 
         // 写入引用数据类型
         out.writeBoolean(true);

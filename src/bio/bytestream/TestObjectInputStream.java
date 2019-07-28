@@ -13,12 +13,10 @@ import java.util.Map;
  */
 public class TestObjectInputStream {
 
-    private static final String TMP_FILE = "student.tmp";
-
     @Test
     public void testRead() throws IOException, ClassNotFoundException {
 
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(TMP_FILE));
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream("text.txt"));
 
         System.out.printf("boolean:%b\n" , in.readBoolean());
         System.out.printf("byte:%d\n" , (in.readByte()&0xff));
