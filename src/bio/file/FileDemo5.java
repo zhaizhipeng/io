@@ -1,4 +1,4 @@
-package file;
+package bio.file;
 
 import java.io.File;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package file;
+package bio.file;
 import java.io.File;
 /**
  * @author dell

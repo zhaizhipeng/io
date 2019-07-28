@@ -1,4 +1,4 @@
-package bytestream;
+package bio.bytestream;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +21,7 @@ public class FileInputStreamDemo{
             e.printStackTrace();
         }
     }
+
     /*
         read():数据的下一个字节，如果达到文件的末尾， 返回-1
      */

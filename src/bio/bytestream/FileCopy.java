@@ -1,4 +1,4 @@
-package bytestream;
+package bio.bytestream;
 
 import java.io.*;
 

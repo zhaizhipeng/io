@@ -1,4 +1,4 @@
-package file;
+package bio.file;
 
 import util.FileUtil;
 import java.io.File;
