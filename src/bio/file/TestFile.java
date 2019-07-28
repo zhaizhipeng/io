@@ -3,6 +3,7 @@ package bio.file;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class TestFile {
 
@@ -133,6 +134,33 @@ public class TestFile {
         System.out.println("文件大小：" + file.length());
         System.out.println("父目录路径名字符串：" + file.getParent());
         System.out.println("最近修改时间：" + file.lastModified());
+    }
+
+    /**
+     * 遍历操作
+     */
+    @Test
+    public void testList(){
+        /**
+         * staic File[] listRoots()	        列出所有的根目录（Window中就是所有系统的盘符）
+         * list()		                    返回指定目录下的文件或者目录名，(抽象路径的String数组)，包含隐藏文件，对于文件这样操作会返回null。
+         * list(FilenameFilter filter)	    返回指定目录中符合过滤条件的子文件或子目录，对于文件这样操作会返回null。
+         * listFiles()		                返回指定目录下的文件或者目录对象（绝对路径的File类实例数组），包含隐藏文件，对于文件这样操作会返回null。
+         * listFiles(FilenameFilter filter)	返回指定目录中符合过滤条件的子文件或子目录，对于文件这样操作会返回null。
+         */
+        File file = new File("d:\\io");
+        FileTypeFilter fileTypeFilter = new FileTypeFilter(".txt");
+        System.out.println("根目录：" + Arrays.toString(File.listRoots()));
+        /*for (String f : file.list()){
+            System.out.println(f);
+        }*/
+        System.out.println(Arrays.toString(file.list()));
+        System.out.println(Arrays.toString(file.list(fileTypeFilter)));
+        /*for (File f : file.listFiles()){
+            System.out.println(f.getName());
+        }*/
+        System.out.println(Arrays.toString(file.listFiles()));
+        System.out.println(Arrays.toString(file.listFiles(fileTypeFilter)));
     }
 
 }
