@@ -14,10 +14,10 @@ public class MainTest {
         Progammer progammer = new Progammer("小Z");
         progammer.getUp();
 
-        JeansWearDecorator jeansWearDecorator = new JeansWearDecorator(progammer);
+        Decorator jeansWearDecorator = new JeansWearDecorator(progammer);
         jeansWearDecorator.getUp();
 
-        SportsWearDecorator sportsWearDecorator = new SportsWearDecorator(progammer);
+        Decorator sportsWearDecorator = new SportsWearDecorator(progammer);
         sportsWearDecorator.getUp();
     }
 
