@@ -31,7 +31,7 @@ public class TestHSSF {
     public void testCreateWorkBookAndSheet() throws IOException {
 
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-        HSSFSheet hssfSheet = hssfWorkbook.createSheet("测试");
+        hssfWorkbook.createSheet("测试");
         FileOutputStream fileOutputStream = new FileOutputStream(new File(pathName));
         hssfWorkbook.write(fileOutputStream);
 
@@ -45,6 +45,7 @@ public class TestHSSF {
      */
     @Test
     public void testCreateCell() throws IOException {
+
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("测试");
 
@@ -67,6 +68,7 @@ public class TestHSSF {
      */
     @Test
     public void testCreateSummary() throws IOException {
+
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
 
         // 创建文档信息
