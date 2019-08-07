@@ -1,25 +1,25 @@
 package poi;
 
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 死磕 HSSF
  */
 public class TestHSSF {
 
-    private final String pathName = "E:\\Test.xls";
+    private final String pathName = "d:\\Test.xls";
 
     /**
      * 创建 WorkBook 和 Sheet
@@ -832,13 +832,13 @@ public class TestHSSF {
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
         HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
 
-        FileInputStream fileInputStream = new FileInputStream("d:\\POI\\Apache.gif");
+        FileInputStream fileInputStream = new FileInputStream("d:\\美女.jpg");
         byte[] bytes = new byte[(int)fileInputStream.getChannel().size()];
         fileInputStream.read(bytes);
-        int pictureIdx = hssfWorkbook.addPicture(bytes,HSSFWorkbook.PICTURE_TYPE_JPEG);
 
+        int pictureIdx = hssfWorkbook.addPicture(bytes, HSSFWorkbook.PICTURE_TYPE_JPEG);
         HSSFPatriarch hssfPatriarch = hssfSheet.createDrawingPatriarch();
-        HSSFClientAnchor hssfClientAnchor = new HSSFClientAnchor(0, 0, 0, 0,(short)0, 0, (short)5, 5);
+        HSSFClientAnchor hssfClientAnchor = new HSSFClientAnchor(0, 0, 0, 0,(short)0, 10, (short)5, 20);
         HSSFPicture hssfPicture = hssfPatriarch.createPicture(hssfClientAnchor,pictureIdx);
         // 自动调节图片大小,图片位置信息可能丢失
         hssfPicture.resize();
@@ -853,24 +853,28 @@ public class TestHSSF {
      * 从Excel中提取图片
      * @throws IOException
      */
-    /*@Test
+    @Test
     public void testGraph6() throws IOException{
 
-        InputStream inputStream = new FileInputStream(filePath);
+        InputStream inputStream = new FileInputStream(new File(pathName));
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook(inputStream);
 
-        List<HSSFPictureData> pictures = hssfWorkbook.getAllPictures();
-        for(int i=0;i<pictures.size();i++) {
-            HSSFPictureData pic=pictures.get(i);
-            String ext = pic.suggestFileExtension();
-            if (ext.equals("png")) {
-                FileOutputStream fileOutputStream = new FileOutputStream("d:\\POI\\Apache.png");
-                fileOutputStream.write(pic.getData());
-                fileOutputStream.close();//保存图片
+        List<HSSFPictureData> hssfPictureDataList = hssfWorkbook.getAllPictures();
+        System.out.println(hssfPictureDataList.size());
+        for(int i = 0; i < hssfPictureDataList.size(); i++) {
+            HSSFPictureData hssfPictureData = hssfPictureDataList.get(i);
+            System.out.println(hssfPictureData.getPictureType());
+            System.out.println(hssfPictureData.getMimeType());
+            System.out.println(hssfPictureData.suggestFileExtension());
+            String ext = hssfPictureData.suggestFileExtension();
+            if (ext.equals("jpeg")) {
+                FileOutputStream fileOutputStream = new FileOutputStream("d:\\美女2.jpg");
+                fileOutputStream.write(hssfPictureData.getData());
+                // 保存图片
+                fileOutputStream.close();
             }
         }
-
-    }*/
+    }
 
     /**
      * 读取Excel内容
@@ -897,10 +901,10 @@ public class TestHSSF {
     @Test
     public void testWrite() throws IOException {
 
-        Workbook workbook = new HSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Test");
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
         for (int i = 0; i < 100; i++){
-            Row row = sheet.createRow(i);
+            Row row = hssfSheet.createRow(i);
             for (int j = 0; j < 10; j++){
                 Cell cell = row.createCell(j);
                 cell.setCellValue("i = " + i + ",j = " + j);
@@ -909,10 +913,243 @@ public class TestHSSF {
 
         File file = new File("Test.xls");
         FileOutputStream fileOutputStream = new FileOutputStream(file);
-        workbook.write(fileOutputStream);
+        hssfWorkbook.write(fileOutputStream);
 
         fileOutputStream.close();
-        workbook.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 组合行、列
+     */
+    @Test
+    public void testGroup() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        // 组合行
+        hssfSheet.groupRow(1, 3);
+        // 组合行
+        hssfSheet.groupRow(2, 4);
+        // 组合列
+        hssfSheet.groupColumn(2, 7);
+        // 取消列组合
+        hssfSheet.ungroupColumn(1, 3);
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 冻结行、列
+     */
+    @Test
+    public void testFreeze() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        // 冻结行列
+        hssfSheet.createFreezePane(2, 0, 2, 0);
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 移动行
+     */
+    @Test
+    public void testMove() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        // 把第3行到第4行向下移动两行
+        hssfSheet.shiftRows(2, 4, 2);
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 设置密码-锁定单元格
+     */
+    @Test
+    public void testOther() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        HSSFRow hssfRow = hssfSheet.createRow(1);
+        HSSFCell hssfCell = hssfRow.createCell(1);
+
+        hssfCell.setCellValue("已锁定");
+        HSSFCellStyle locked = hssfWorkbook.createCellStyle();
+        //设置锁定
+        locked.setLocked(true);
+        hssfCell.setCellStyle(locked);
+
+        hssfCell = hssfRow.createCell(2);
+        hssfCell.setCellValue("未锁定");
+        HSSFCellStyle unlocked = hssfWorkbook.createCellStyle();
+        // 设置不锁定
+        unlocked.setLocked(false);
+        hssfCell.setCellStyle(unlocked);
+
+        // 设置保护密码
+        hssfSheet.protectSheet("password");
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 数据有效性
+     */
+    @Test
+    public void testOther2() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        HSSFRow hssfRow = hssfSheet.createRow(0);
+        HSSFCell hssfCell = hssfRow.createCell(0);
+        hssfCell.setCellValue("日期列");
+        // 选定一个区域
+        CellRangeAddressList cellRangeAddressList = new CellRangeAddressList(1, 65535,0, 0);
+        DVConstraint dvConstraint = DVConstraint.createDateConstraint(DVConstraint.OperatorType.BETWEEN, "1993-01-01" ,"2014-12-31" , "yyyy-MM-dd" );
+        HSSFDataValidation hssfDataValidation = new HSSFDataValidation(cellRangeAddressList, dvConstraint);
+        hssfDataValidation.createErrorBox("错误", "你必须输入一个时间！");
+        hssfSheet.addValidationData(hssfDataValidation);
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 下拉菜单
+     */
+    @Test
+    public void testOther3() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        CellRangeAddressList cellRangeAddressList = new CellRangeAddressList(0, 65535,0, 0);
+        DVConstraint dvConstraint = DVConstraint.createExplicitListConstraint(new String[] { "C++","Java", "C#" });
+        HSSFDataValidation hssfDataValidation = new HSSFDataValidation(cellRangeAddressList, dvConstraint);
+        hssfSheet.addValidationData(hssfDataValidation);
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 打印基本设置
+     */
+    @Test
+    public void testOther4() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        // 得到打印对象
+        HSSFPrintSetup hssfPrintSetup = hssfSheet.getPrintSetup();
+        // true，则表示页面方向为横向；否则为纵向
+        hssfPrintSetup.setLandscape(false);
+        // 缩放比例80%(设置为0-100之间的值)
+        hssfPrintSetup.setScale((short)80);
+        // 设置页宽
+        hssfPrintSetup.setFitWidth((short)2);
+        // 设置页高
+        hssfPrintSetup.setFitHeight((short)4);
+        // 纸张设置
+        hssfPrintSetup.setPaperSize(HSSFPrintSetup.A4_PAPERSIZE);
+        // 设置打印起始页码不使用"自动"
+        hssfPrintSetup.setUsePage(true);
+        // 设置打印起始页码
+        hssfPrintSetup.setPageStart((short)6);
+        // 值为true时，表示单色打印
+        hssfPrintSetup.setNoColor(true);
+        // 值为true时，表示用草稿品质打印
+        hssfPrintSetup.setDraft(true);
+        // true表示“先行后列”；false表示“先列后行”
+        hssfPrintSetup.setLeftToRight(true);
+        // 设置打印批注
+        hssfPrintSetup.setNotes(true);
+        // Sheet页自适应页面大小
+        hssfSheet.setAutobreaks(false);
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
+    }
+
+    /**
+     * 超链接
+     */
+    @Test
+    public void testOther5() throws IOException {
+
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
+        HSSFSheet hssfSheet = hssfWorkbook.createSheet("Test");
+
+        CreationHelper createHelper = hssfWorkbook.getCreationHelper();
+        // 关联到网站
+        Hyperlink hyperlink =createHelper.createHyperlink(HyperlinkType.URL);
+        hyperlink.setAddress("http://poi.apache.org/");
+        hssfSheet.createRow(0).createCell(0).setHyperlink(hyperlink);
+
+        // 关联到当前目录的文件
+        hyperlink = createHelper.createHyperlink(HyperlinkType.FILE);
+        hyperlink.setAddress("sample.xls");
+        hssfSheet.createRow(0).createCell(1).setHyperlink(hyperlink);
+
+        // e-mail 关联
+        hyperlink = createHelper.createHyperlink(HyperlinkType.EMAIL);
+        hyperlink.setAddress("mailto:poi@apache.org?subject=Hyperlinks");
+        hssfSheet.createRow(0).createCell(2).setHyperlink(hyperlink);
+
+        //关联到工作簿中的位置
+        hyperlink = createHelper.createHyperlink(HyperlinkType.DOCUMENT);
+        hyperlink.setAddress("'Test0'!C3");
+        hssfSheet.createRow(0).createCell(3).setHyperlink(hyperlink);
+
+        File file = new File("Test.xls");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        hssfWorkbook.write(fileOutputStream);
+
+        fileOutputStream.close();
+        hssfWorkbook.close();
     }
 
 }
