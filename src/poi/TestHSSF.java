@@ -1152,4 +1152,28 @@ public class TestHSSF {
         hssfWorkbook.close();
     }
 
+    /**
+     * 实战演练
+     * @throws IOException
+     */
+    @Test
+    public void testActual() throws IOException {
+
+        FileInputStream fileInputStream = new FileInputStream(new File("model.xls"));
+        HSSFWorkbook hssfWorkbook = new HSSFWorkbook(fileInputStream);
+        HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
+
+        for (int row = 1; row < 100; row++) {
+            for (int col = 0; col < 10; col++){
+                hssfSheet.getRow(row).getCell(col).setCellValue("row = " + row + ", col = " + col);
+            }
+        }
+
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("report.xls"));
+        hssfWorkbook.write(fileOutputStream);
+        fileOutputStream.close();
+        hssfWorkbook.close();
+        fileInputStream.close();
+    }
+
 }
