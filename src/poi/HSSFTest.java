@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 死磕 HSSF
  */
-public class TestHSSF {
+public class HSSFTest {
 
     private final String pathName = "d:\\Test.xls";
 

@@ -12,9 +12,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * 死磕
+ * 死磕 XSSF
  */
-public class TestXSSF {
+public class XSSFTest {
 
     /**
      * 测试写数据 - 无模板
